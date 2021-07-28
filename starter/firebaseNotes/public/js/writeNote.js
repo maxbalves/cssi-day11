@@ -1,12 +1,15 @@
-let dbRef = firebase.database().ref();
+const dbRef = firebase.database().ref();
 
 let googleUser;
 
-let noteTitle = document.querySelector('#noteTitle');
-let noteText = document.querySelector('#noteText');
-let welcomeName = document.querySelector('#name-title');
+const welcomeName = document.querySelector('#name-title');
+const noteTitle = document.querySelector('#noteTitle');
+const noteText = document.querySelector('#noteText');
+const noteLabel = document.querySelector('#noteLabel');
+const showLabels = document.querySelector('#labels');
+let labels_arr = [];
 
-let submitBtn = document.querySelector('#submit-btn');
+const submitBtn = document.querySelector('#submit-btn');
 
 // When the page loads, we check if the user is signed in or not
 // If not, go back to index.html
@@ -27,13 +30,23 @@ const handleNoteSubmit = () => {
     dbRef.push({
         title: noteTitle.value,
         text: noteText.value,
+        labels: labels_arr,
         created: Date()
     });
 
-    noteTitle.value = "";
-    noteText.value = "";
+    noteTitle.value = '';
+    noteText.value = '';
+    labels_arr = [];
+    showLabels.innerHTML = '';
 };
 
 submitBtn.addEventListener('click', (e) => {
     handleNoteSubmit();
+});
+
+noteLabel.addEventListener('change', (e) => {
+    labels_arr.push(noteLabel.value);
+    noteLabel.value = '';
+
+    showLabels.innerHTML = `<kbd class="has-background-info-light">${labels_arr[labels_arr.length-1]}</kbd>` + showLabels.innerHTML
 });
