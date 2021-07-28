@@ -25,12 +25,12 @@
     <script defer src="/__/firebase/8.3.1/firebase-auth.js"></script>
     <script defer src="/__/firebase/8.3.1/firebase-database.js"></script>
     <script defer src="/__/firebase/init.js?useEmulator=true"></script>
-    <script defer src="js/signIn.js"></script>
+    <script defer src="js/signUp.js"></script>
   </head>
   <body>
     <nav class="navbar" role="navigation" aria-label="main navigation">
         <div class="navbar-menu">
-            <a class="navbar-item" href="/signUp.html">Sign Up</a>
+            <a class="navbar-item" href="/index.html">Login</a>
         </div>
     </nav>
     <section class="hero is-fullheight is-default is-bold">
@@ -42,7 +42,7 @@
                             Welcome to 🔥Fire Notes📝!
                         </h1>
                         <h2 class="subtitle is-4">
-                            Log in to view your notes or create a new one. 
+                            Sign up to start creating notes.
                         </h2>
                         <br>
                         <p class="has-text-centered">
@@ -54,16 +54,8 @@
                         </p>
                         <br>
                         <p class="has-text-centered">
-                            <a id="sign-in-btn" onclick="signIn()" class="button is-medium is-info is-outlined">
-                                Log In
-                            </a>
-                        </p>
-                        <br>
-                        <p>OR</p>
-                        <br>
-                        <p class="has-text-centered">
-                            <a id="sign-in-btn" onclick="signInGoogle()" class="button is-medium is-primary is-outlined">
-                                Log In With Google
+                            <a id="sign-up-btn" onclick="signUp()" class="button is-medium is-info is-outlined">
+                                Sign Up
                             </a>
                         </p>
                     </div>

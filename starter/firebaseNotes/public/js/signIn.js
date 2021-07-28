@@ -1,10 +1,9 @@
-// Since we have the "onclick" property on HTML, we don't need an EventListener for the button
-/* We can also do this:
-const signInButton = document.querySelector("#sign-in-btn");
-signInButton.onclick = signIn();
-*/
+const emailElement = document.querySelector('#email-input');
+const passwordElement = document.querySelector('#password-input');
 
-const signIn = () => {
+const signInButton = document.querySelector("#sign-in-btn");
+
+const signInGoogle = () => {
     const provider = new firebase.auth.GoogleAuthProvider();
 
     firebase.auth()
@@ -38,3 +37,43 @@ const signIn = () => {
             console.log(err);
         });
 };
+
+const signIn = () => {
+    let email = emailElement.value;
+    let password = passwordElement.value;
+    firebase.auth().signInWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+            var user = userCredential.user;
+            window.location = 'writeNote.html';
+        }).catch((error) => {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            // The email of the user's account used.
+            var email = error.email;
+            // The firebase.auth.AuthCredential type that was used.
+            var credential = error.credential;
+            // ...
+            let err = {
+                errorCode,
+                errorMessage,
+                email,
+                credential
+            };
+            console.log("Something went wrong...");
+            console.log(err);
+            alert(errorMessage);
+        });
+};
+
+emailElement.addEventListener('keypress', (e) => {
+    if(e.key == "Enter"){
+        signInButton.click();
+    }
+})
+
+passwordElement.addEventListener('keypress', (e) => {
+    if(e.key == "Enter"){
+        signInButton.click();
+    }
+})
