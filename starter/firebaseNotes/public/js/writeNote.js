@@ -1,6 +1,6 @@
 const db = firebase.database();
 
-let googleUser;
+let User;
 
 const welcomeName = document.querySelector('#name-title');
 const noteTitle = document.querySelector('#noteTitle');
@@ -17,14 +17,24 @@ window.onload = (event) => {
     // gives us the object with all user info or NULL
     firebase.auth().onAuthStateChanged((user) => {
         if(user){
-            console.log(`Logged in as ${user.displayName}`);
-            googleUser = user;
-            welcomeName.innerHTML = `Hey ${googleUser.displayName.split(' ')[0]},`; // splits the string to show first name
+            User = user;
+            let name = checkUserName();
+            welcomeName.innerHTML = `Hey ${name},`; // splits the string to show first name
         } else {
             window.location = "index.html";
         }
     });
 };
+
+const checkUserName = () => {
+    let n = User.displayName;
+    if(n == null){
+        n = User.email.split('@')[0];
+    } else {
+        n = n.split(' ')[0];
+    }
+    return n;
+}
 
 const handleNoteSubmit = () => {
     const note = {
@@ -34,7 +44,7 @@ const handleNoteSubmit = () => {
         created: Date()
     };
 
-    db.ref(`users/${googleUser.uid}`).push(note)
+    db.ref(`users/${User.uid}`).push(note)
         .then(() => {
             noteTitle.value = '';
             noteText.value = '';
