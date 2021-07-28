@@ -57,5 +57,6 @@ noteLabel.addEventListener('change', (e) => {
     labels_arr.push(noteLabel.value);
     noteLabel.value = '';
 
-    showLabels.innerHTML = `<kbd class="has-background-info-light">${labels_arr[labels_arr.length-1]}</kbd>` + showLabels.innerHTML
+    showLabels.innerHTML += `<kbd class="has-background-info-light"">${labels_arr[labels_arr.length-1]}</kbd>`
+    console.log(labels_arr);
 });

@@ -3,6 +3,11 @@ const db = firebase.database();
 const cardsElement = document.querySelector('#app');
 const colorsTextElement = document.querySelector('#randomColors');
 
+const labelInputElement = document.querySelector('#label-input');
+const showLabelsElement = document.querySelector('#labels');
+let all
+let labels_arr = [];
+
 let isRandomColors = true;  // by default, cards have random colors
 
 let User;
@@ -31,8 +36,26 @@ const getNotes = (uid) => {
 const renderDataAsHtml = (data) => {
     for(key in data){
         const note = data[key];
-        cardsElement.innerHTML += createCard(note)
+        let shouldCreate = true;
+        if(labels_arr.length != 0){        
+            shouldCreate = filterByLabels(note);
+        }
+        if(shouldCreate){
+            cardsElement.innerHTML += createCard(note)
+        }
     }
+};
+
+const filterByLabels = (note) => {
+    let r = false;
+    for(label of labels_arr){
+        for(key in note.labels){
+            if(note.labels[key].toLowerCase() == label.toLowerCase()){
+                r = true;
+            }
+        }
+    }
+    return r;
 };
 
 const createCard = (note) => {
@@ -82,7 +105,7 @@ const checkUserName = () => {
         n = n.split(' ')[0];
     }
     return n;
-}
+};
 
 const randomColors = () => {
     isRandomColors = !isRandomColors;
@@ -93,4 +116,12 @@ const randomColors = () => {
     } else {
         colorsTextElement.innerHTML = "Turn On Random Colors";
     }
-}
+};
+
+labelInputElement.addEventListener('change', (e) => {
+    labels_arr.push(labelInputElement.value);
+    labelInputElement.value = '';
+
+    showLabelsElement.innerHTML += `<kbd class="has-background-info-light">${labels_arr[labels_arr.length-1]}</kbd>`;
+    getNotes(User.uid);
+});
