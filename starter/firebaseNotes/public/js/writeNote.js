@@ -1,4 +1,4 @@
-const dbRef = firebase.database().ref();
+const db = firebase.database();
 
 let googleUser;
 
@@ -27,22 +27,21 @@ window.onload = (event) => {
 };
 
 const handleNoteSubmit = () => {
-    dbRef.push({
+    const note = {
         title: noteTitle.value,
         text: noteText.value,
         labels: labels_arr,
         created: Date()
-    });
+    };
 
-    noteTitle.value = '';
-    noteText.value = '';
-    labels_arr = [];
-    showLabels.innerHTML = '';
+    db.ref(`users/${googleUser.uid}`).push(note)
+        .then(() => {
+            noteTitle.value = '';
+            noteText.value = '';
+            labels_arr = [];
+            showLabels.innerHTML = '';
+        });
 };
-
-submitBtn.addEventListener('click', (e) => {
-    handleNoteSubmit();
-});
 
 noteLabel.addEventListener('change', (e) => {
     labels_arr.push(noteLabel.value);
