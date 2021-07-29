@@ -54,6 +54,46 @@
         </div>
       </div>
     </div>
+    <div id="editModal" class="modal">
+        <div class="modal-background" onclick="closeEditModal()">
+        </div>
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title">Edit Note</p>
+                <button class="delete" aria-label="close" onclick="closeEditModal()"></button>
+            </header>
+            <section class="modal-card-body">
+                <label class="label">Title</label>
+                <input id="titleInput" class="input" type="text" autocomplete="off">
+
+                <label class="label">Text</label>
+                <textarea id="textInput" class="textarea" autocomplete="off"></textarea>
+                <input id="editNoteId" type="hidden">
+            </section>
+            <footer class="modal-card-foot">
+                <button class="button is-success" onclick="saveEditedNote()">Save changes</button>
+                <button class="button" onclick="closeEditModal()">Cancel</button>
+            </footer>
+        </div>
+    </div>
+    <div id="deleteModal" class="modal">
+        <div class="modal-background" onclick="closeDeleteModal()">
+        </div>
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title">Edit Note</p>
+                <button class="delete" aria-label="close" onclick="closeDeleteModal()"></button>
+            </header>
+            <section class="modal-card-body">
+                <p class="subtitle">Are you sure you want to delete this note?</p>
+                <input id="deleteNoteId" type="hidden">
+            </section>
+            <footer class="modal-card-foot">
+                <button id="delete-btn" class="button is-danger" onclick="deleteNote()">Delete Note</button>
+                <button class="button" onclick="closeDeleteModal()">Cancel</button>
+            </footer>
+        </div>
+    </div>
     <footer class="footer">
       <div class="container">
         <div class="content has-text-centered">

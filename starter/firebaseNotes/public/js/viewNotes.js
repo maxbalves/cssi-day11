@@ -3,9 +3,17 @@ const db = firebase.database();
 const cardsElement = document.querySelector('#app');
 const colorsTextElement = document.querySelector('#randomColors');
 
+const editNoteId = document.querySelector('#editNoteId');
+const editModal = document.querySelector('#editModal');
+const titleInput = document.querySelector('#titleInput');
+const textInput = document.querySelector('#textInput');
+
+const deleteModal = document.querySelector('#deleteModal');
+const deleteNoteId = document.querySelector('#deleteNoteId');
+const deleteBtn = document.querySelector('#delete-btn');
+
 const labelInputElement = document.querySelector('#label-input');
 const showLabelsElement = document.querySelector('#labels');
-let all
 let labels_arr = [];
 
 let isRandomColors = true;  // by default, cards have random colors
@@ -41,7 +49,7 @@ const renderDataAsHtml = (data) => {
             shouldCreate = filterByLabels(note);
         }
         if(shouldCreate){
-            cardsElement.innerHTML += createCard(note)
+            cardsElement.innerHTML += createCard(note, key)
         }
     }
 };
@@ -58,7 +66,7 @@ const filterByLabels = (note) => {
     return r;
 };
 
-const createCard = (note) => {
+const createCard = (note, noteId) => {
     let name = checkUserName();
 
     if(isRandomColors == true){
@@ -74,6 +82,10 @@ const createCard = (note) => {
                         <div class="content">
                             <p>${note.text}</p>
                         </div>
+                    </div>
+                    <div class="card-footer">
+                        <a href="#" class="card-footer-item" onclick="editNote('${noteId}')">Edit</a>
+                        <a href="#" class="card-footer-item" onclick="confirmDeleteModal('${noteId}')">Delete</a>
                     </div>
                 </div>
             </div>
@@ -91,11 +103,63 @@ const createCard = (note) => {
                             <p>${note.text}</p>
                         </div>
                     </div>
+                    <div class="card-footer">
+                        <a href="#" class="card-footer-item" onclick="editNote('${noteId}')">Edit</a>
+                        <a href="#" class="card-footer-item" onclick="confirmDeleteModal('${noteId}')">Delete</a>
+                    </div>
                 </div>
             </div>
         `;
     }
 };
+
+const confirmDeleteModal = (noteId) => {
+    deleteModal.classList.add('is-active');
+    deleteNoteId.value = noteId;
+};
+
+const deleteNote = () => {
+    console.log('deleting note');
+    let noteId = deleteNoteId.value;
+    const noteToDeleteRef = db.ref(`users/${User.uid}/${noteId}`);
+    noteToDeleteRef.remove();
+    closeDeleteModal();
+};
+
+const closeDeleteModal = () => {
+    deleteModal.classList.remove('is-active');
+};
+
+const editNote = (noteId) => {
+    console.log('editing note');
+    db.ref(`users/${User.uid}/${noteId}`).on('value', (snapshot) => {
+        let data = snapshot.val();
+        titleInput.value = data.title;
+        textInput.value = data.text;
+    });
+    editNoteId.value = noteId;
+    editModal.classList.add('is-active');
+};
+
+const closeEditModal = () => {
+    editModal.classList.remove('is-active');
+};
+
+const saveEditedNote = () => {
+    console.log('save');
+    const noteId = editNoteId.value;
+    const noteRef = db.ref(`users/${User.uid}/${noteId}`)
+
+    let title = titleInput.value;
+    let text = textInput.value;
+
+    noteRef.update({
+        title: title,
+        text: text
+    });
+
+    closeEditModal();
+}
 
 const checkUserName = () => {
     let n = User.displayName;
